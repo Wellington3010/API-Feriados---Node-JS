@@ -1,6 +1,6 @@
 
     const config = require('./config/apiConfig');
-    const port = 3000;
+    const port = 5432;
     const app = config();
     
 
