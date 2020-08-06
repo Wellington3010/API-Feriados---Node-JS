@@ -56,7 +56,7 @@ module.exports = app => {
 
 
                 if(data != null && data.CODIGO_IBGE == null){
-                    res.status(200).send(data.name);
+                    res.json({name:data.name});
                     
                 }
                 else if(data != null && validar.isCodigoEstadual(data.CODIGO_IBGE) && validar.isCodigoMunicipal(req.params.id)){
@@ -303,6 +303,68 @@ module.exports = app => {
         
         
 });
+
+app.put('/feriados/:date',(req,res) => {
+
+    if(req.body.name === undefined)
+    {
+        res.status(400).send("Necessário enviar o corpo da requisição no formato JSON informando um valor para o atributo name.");
+        return;
+    }
+
+        //Validando o formato da data
+        if(!validar.dataSemAno(req.params.date))
+        {
+            res.status(400).send("A data na url deve conter apenas o dia e o mês");
+            return;
+   
+        }
+        else
+        {       
+            let Year = new Date().getFullYear().toString().concat('-');
+            req.params.date = Year.concat(req.params.date);
+        }
+
+        //Validando a data
+         if(!validar.validarData(req.params.date))
+        {
+            res.status(400).send("Data inválida");
+            return;
+        }
+
+
+
+        service.consultarFeriadoNacional(req,feriado).then(data => {
+
+            if(data != null)
+            {
+                service.atualizarFeriadoNacional(req,feriado).then(data => {
+                
+                    res.status(200).send("REGISTRO ATUALIZADO COM SUCESSO");
+                
+                }).catch(err => {
+                    res.status(404).send(err);
+                });
+            }
+            else
+            {
+                service.cadastrarFeriadoNacional(req,feriado).then(data => {
+                
+                    res.status(201).send("REGISTRO CRIADO COM SUCESSO");
+                
+                }).catch(err => {
+                    res.status(404).send(err);
+                });
+            }
+        }).catch(err => {
+            res.status(404).send(err);
+        });
+
+
+});
+
+
+
 }
 
 

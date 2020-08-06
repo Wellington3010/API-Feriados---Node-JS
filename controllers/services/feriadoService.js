@@ -57,7 +57,7 @@ function  consultarFeriadoPorData(req,model)
 
 };
 
-function  consultarFeriadoPorDataFeriadoNacional(req,model)
+function  consultarFeriadoNacional(req,model)
 {
 
     return new Promise((resolve,reject) => {
@@ -121,6 +121,27 @@ function cadastrarFeriadoMovel(req,model)
 
 };
 
+function cadastrarFeriadoNacional(req,model)
+{
+
+
+            return new Promise((resolve,reject) => {
+
+                model.create({
+                    DATA: req.params.date,
+                    CODIGO_IBGE:null,
+                    name:req.body.name
+                 }).then(data =>{
+                     resolve(data);
+                 }).catch(err => {
+                     reject(err);
+                 });
+        
+            });    
+        
+
+};
+
 
 function atualizarFeriado(req,model)
 {
@@ -146,6 +167,33 @@ function atualizarFeriado(req,model)
 
 
 };
+
+
+function atualizarFeriadoNacional(req,model)
+{
+
+
+    return new Promise((resolve,reject) => {
+
+
+                model.update({
+                    name: req.body.name,
+                  }, {
+                    where: {
+                      DATA:req.params.date
+                    }
+                  }).then(res => {
+                      resolve(res);
+                  }).catch(err => {
+                      reject(err);
+                  });
+
+    });    
+
+
+};
+
+
 
 function atualizarFeriadoMovel(req,model)
 {
@@ -217,4 +265,4 @@ function deletarFeriadoMovel(req,model)
 
 
 
-module.exports = {consultarFeriado,consultarFeriadoMovel,cadastrarFeriado,cadastrarFeriadoMovel,atualizarFeriado,atualizarFeriadoMovel,deletarFeriado,deletarFeriadoMovel,consultarFeriadoPorData,consultarFeriadoPorDataFeriadoNacional};
+module.exports = {consultarFeriado,consultarFeriadoMovel,cadastrarFeriado,cadastrarFeriadoMovel,atualizarFeriado,atualizarFeriadoMovel,deletarFeriado,deletarFeriadoMovel,consultarFeriadoPorData,consultarFeriadoNacional,cadastrarFeriadoNacional,atualizarFeriadoNacional};
