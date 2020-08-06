@@ -1,6 +1,6 @@
 
     const config = require('./config/apiConfig');
-    const port = 5432;
+    const port = process.env.PORT || 5432;
     const app = config();
     
 
